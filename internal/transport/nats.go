@@ -17,6 +17,8 @@ type STAN struct {
 }
 
 func NewSTAN(cfg config.NATS) *STAN {
+	fmt.Println(cfg)
+
 	return &STAN{
 		config:  cfg,
 		usecase: usecase.NewUscase(),

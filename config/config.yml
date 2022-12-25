@@ -1,0 +1,6 @@
+# TODO: Добавить конфигурирование через переменные среды
+
+nats:
+  cluster_id: 'test-cluster'
+  client_id: 'test-client-1'
+  subject: 'foo'

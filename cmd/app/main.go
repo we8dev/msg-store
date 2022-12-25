@@ -6,15 +6,7 @@ import (
 )
 
 func main() {
-	natsCfg := config.NATS{
-		ClusterID: "test-cluster",
-		ClientID:  "test-client-1",
-		Subject:   "foo",
-	}
+	cfg, _ := config.NewConfig()
 
-	cfg := config.Config{
-		natsCfg,
-	}
-
-	app.Run(&cfg)
+	app.Run(cfg)
 }

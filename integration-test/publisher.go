@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/nats-io/stan.go"
 	"log"
 	"sync"
@@ -99,6 +100,8 @@ func Publish(sc stan.Conn, wg *sync.WaitGroup) {
 		if err := sc.Publish(subject, jsonData); err != nil {
 			log.Fatal(err)
 		}
+
+		fmt.Println("published")
 
 		time.Sleep(time.Second)
 	}

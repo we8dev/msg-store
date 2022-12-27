@@ -2,7 +2,7 @@ package cache
 
 import (
 	"errors"
-	"github.com/pokrovsky-io/msg-store/internal/model"
+	"github.com/pokrovsky-io/msg-store/internal/entity"
 )
 
 var (
@@ -10,17 +10,17 @@ var (
 )
 
 type Cache struct {
-	orders map[int]*model.Order
+	orders map[int]*entity.Order
 }
 
-func NewCache() *Cache {
+func New() *Cache {
 	// TODO Установить capacity в зависимости от кол-ва элементов
 	return &Cache{
-		orders: make(map[int]*model.Order),
+		orders: make(map[int]*entity.Order),
 	}
 }
 
-func (c *Cache) SaveOrders(orders ...*model.Order) {
+func (c *Cache) SaveOrders(orders ...*entity.Order) {
 	startId := len(c.orders) + 1
 
 	for i, order := range orders {
@@ -28,8 +28,8 @@ func (c *Cache) SaveOrders(orders ...*model.Order) {
 	}
 }
 
-func (c *Cache) GetOrders(ids ...int) ([]*model.Order, error) {
-	res := make([]*model.Order, 0, len(ids))
+func (c *Cache) GetOrders(ids ...int) ([]*entity.Order, error) {
+	res := make([]*entity.Order, 0, len(ids))
 
 	for _, id := range ids {
 		order, ok := c.orders[id]
@@ -50,5 +50,5 @@ func (c *Cache) RemoveOrders(ids ...int) {
 }
 
 func (c *Cache) ClearStorage() {
-	c.orders = make(map[int]*model.Order)
+	c.orders = make(map[int]*entity.Order)
 }

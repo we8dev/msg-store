@@ -1,68 +1,59 @@
-package transport
+package nats
 
 import (
 	"encoding/json"
 	"fmt"
 	"github.com/nats-io/stan.go"
-	"github.com/pokrovsky-io/msg-store/config"
-	"github.com/pokrovsky-io/msg-store/internal/model"
+	"github.com/pokrovsky-io/msg-store/internal/entity"
 	"github.com/pokrovsky-io/msg-store/internal/usecase"
 	"log"
 	"sync"
 )
 
 type STAN struct {
-	config  config.NATS
-	usecase usecase.UseCase
+	conn    stan.Conn
+	useCase usecase.Order
 }
 
-func NewSTAN(cfg config.NATS) *STAN {
-	fmt.Println(cfg)
-
+func New(sc stan.Conn, uc usecase.Order) *STAN {
 	return &STAN{
-		config:  cfg,
-		usecase: usecase.NewUscase(),
+		conn:    sc,
+		useCase: uc,
 	}
 }
 
 // TODO  Переименовать функцию
 func (stn *STAN) inputHandler(msg *stan.Msg) {
-	var order model.Order
+	var order entity.Order
 	if err := json.Unmarshal(msg.Data, &order); err != nil {
 		// TODO обработать ошибку
 		log.Fatal(err)
 	}
 
-	//stn.usecase.Create()
+	//stn.useCase.Create()
 
 	fmt.Println(order)
 }
 
 // TODO Переделать логику работы функции
 // Здесь будет ждать вечно...
-func (stn *STAN) Subscribe() *stan.Conn {
-	sc, err := stan.Connect(stn.config.ClusterID, stn.config.ClientID)
-	if err != nil {
-		log.Fatal(err)
-	}
-
+func (stn *STAN) Subscribe(subj string) {
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
 
-	go func(sc stan.Conn, wg *sync.WaitGroup) {
+	go func(wg *sync.WaitGroup) {
 		defer wg.Done()
 
-		sub, err := sc.Subscribe(stn.config.Subject, stn.inputHandler)
+		sub, err := stn.conn.Subscribe(subj, stn.inputHandler)
 		if err != nil {
+			// TODO: Обработать ошибку
 			log.Fatal(err)
 		}
 		defer sub.Unsubscribe()
 
 		select {}
 
-	}(sc, wg)
+	}(wg)
 
 	wg.Wait()
-
-	return &sc
 }

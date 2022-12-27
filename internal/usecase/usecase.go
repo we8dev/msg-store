@@ -16,6 +16,12 @@ func New(cache, db OrderRepo) *OrderUseCase {
 	}
 }
 
-func (uc *OrderUseCase) Create(orders ...*entity.Order) {
+// TODO Добавить взаимодействия кэша и БД
 
+func (uc *OrderUseCase) Create(order *entity.Order) {
+	uc.cache.Create(order)
+}
+
+func (uc *OrderUseCase) Get(id int) (*entity.Order, error) {
+	return uc.cache.Get(id)
 }

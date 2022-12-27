@@ -2,7 +2,6 @@ package nats
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/nats-io/stan.go"
 	"github.com/pokrovsky-io/msg-store/internal/entity"
 	"github.com/pokrovsky-io/msg-store/internal/usecase"
@@ -30,9 +29,8 @@ func (stn *STAN) inputHandler(msg *stan.Msg) {
 		log.Fatal(err)
 	}
 
-	//stn.useCase.Create()
-
-	fmt.Println(order)
+	// TODO: Накапливать входящие результаты и коммитить их с опредленной частотой
+	stn.useCase.Create(&order)
 }
 
 // TODO Переделать логику работы функции

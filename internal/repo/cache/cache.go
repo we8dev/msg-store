@@ -20,35 +20,36 @@ func New() *Cache {
 	}
 }
 
-func (c *Cache) SaveOrders(orders ...*entity.Order) {
-	startId := len(c.orders) + 1
+func (c *Cache) Create(order *entity.Order) {
+	id := len(c.orders) + 1
 
-	for i, order := range orders {
-		c.orders[startId+i] = order
-	}
+	c.orders[id] = order
 }
 
-func (c *Cache) GetOrders(ids ...int) ([]*entity.Order, error) {
-	res := make([]*entity.Order, 0, len(ids))
-
-	for _, id := range ids {
-		order, ok := c.orders[id]
-		if !ok {
-			return nil, ErrOrderNotFound
-		}
-
-		res = append(res, order)
+func (c *Cache) Get(id int) (*entity.Order, error) {
+	order, ok := c.orders[id]
+	if !ok {
+		return nil, ErrOrderNotFound
 	}
 
-	return res, nil
+	return order, nil
 }
 
-func (c *Cache) RemoveOrders(ids ...int) {
-	for _, id := range ids {
-		delete(c.orders, id)
-	}
-}
+//func (c *Cache) SaveOrders(orders ...*entity.Order) {
+//	startId := len(c.orders) + 1
+//
+//	for i, order := range orders {
+//		c.orders[startId+i] = order
+//	}
+//}
 
-func (c *Cache) ClearStorage() {
-	c.orders = make(map[int]*entity.Order)
-}
+//
+//func (c *Cache) RemoveOrders(ids ...int) {
+//	for _, id := range ids {
+//		delete(c.orders, id)
+//	}
+//}
+//
+//func (c *Cache) ClearStorage() {
+//	c.orders = make(map[int]*entity.Order)
+//}

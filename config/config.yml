@@ -4,3 +4,6 @@ nats:
   cluster_id: 'test-cluster'
   client_id: 'test-client-1'
   subject: 'foo'
+
+http:
+  port: '8080'

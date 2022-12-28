@@ -5,15 +5,22 @@ import (
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
-type Config struct {
-	NATS `yaml:"nats"`
-}
+type (
+	Config struct {
+		NATS `yaml:"nats"`
+		HTTP `yaml:"http"`
+	}
 
-type NATS struct {
-	ClusterID string `yaml:"cluster_id"`
-	ClientID  string `yaml:"client_id"`
-	Subject   string `yaml:"subject"`
-}
+	NATS struct {
+		ClusterID string `yaml:"cluster_id"`
+		ClientID  string `yaml:"client_id"`
+		Subject   string `yaml:"subject"`
+	}
+
+	HTTP struct {
+		Port string `yaml:"port"`
+	}
+)
 
 func NewConfig() (*Config, error) {
 	cfg := &Config{}

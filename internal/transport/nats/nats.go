@@ -2,6 +2,7 @@ package nats
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/nats-io/stan.go"
 	"github.com/pokrovsky-io/msg-store/internal/entity"
 	"github.com/pokrovsky-io/msg-store/internal/usecase"
@@ -33,25 +34,17 @@ func (stn *STAN) inputHandler(msg *stan.Msg) {
 	stn.useCase.Create(&order)
 }
 
-// TODO Переделать логику работы функции
-// Здесь будет ждать вечно...
-func (stn *STAN) Subscribe(subj string) {
-	wg := &sync.WaitGroup{}
-	wg.Add(1)
+func (stn *STAN) Subscribe(wg *sync.WaitGroup, subj string) {
+	// Use a WaitGroup to wait for a message to arrive
 
-	go func(wg *sync.WaitGroup) {
-		defer wg.Done()
-
-		sub, err := stn.conn.Subscribe(subj, stn.inputHandler)
-		if err != nil {
-			// TODO: Обработать ошибку
-			log.Fatal(err)
-		}
-		defer sub.Unsubscribe()
-
-		select {}
-
-	}(wg)
-
-	wg.Wait()
+	// Subscribe
+	_, err := stn.conn.Subscribe(subj, func(msg *stan.Msg) {
+		//defer wg.Done()
+		fmt.Println(msg.Data)
+		stn.inputHandler(msg)
+	})
+	if err != nil {
+		// TODO: Обработать ошибку
+		log.Fatal(err)
+	}
 }

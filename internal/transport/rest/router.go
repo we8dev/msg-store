@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/pokrovsky-io/msg-store/internal/usecase"
 	"net/http"
@@ -19,6 +20,7 @@ func NewRouter(router *gin.Engine, uc usecase.Order) {
 	router.GET("/:id", func(c *gin.Context) {
 		id, _ := strconv.Atoi(c.Param("id"))
 		order, _ := uc.Get(id)
+		fmt.Println("call")
 
 		c.JSON(http.StatusOK, order)
 	})

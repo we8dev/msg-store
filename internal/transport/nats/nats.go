@@ -2,7 +2,6 @@ package nats
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/nats-io/stan.go"
 	"github.com/pokrovsky-io/msg-store/internal/entity"
 	"github.com/pokrovsky-io/msg-store/internal/usecase"
@@ -40,7 +39,6 @@ func (stn *STAN) Subscribe(wg *sync.WaitGroup, subj string) {
 	// Subscribe
 	_, err := stn.conn.Subscribe(subj, func(msg *stan.Msg) {
 		//defer wg.Done()
-		fmt.Println(msg.Data)
 		stn.inputHandler(msg)
 	})
 	if err != nil {

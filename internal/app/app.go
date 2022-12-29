@@ -5,23 +5,30 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/nats-io/stan.go"
 	"github.com/pokrovsky-io/msg-store/config"
-	"github.com/pokrovsky-io/msg-store/internal/repo/cache"
-	"github.com/pokrovsky-io/msg-store/internal/repo/psql"
+	"github.com/pokrovsky-io/msg-store/internal/repo"
 	"github.com/pokrovsky-io/msg-store/internal/transport/nats"
 	"github.com/pokrovsky-io/msg-store/internal/transport/rest"
 	"github.com/pokrovsky-io/msg-store/internal/usecase"
-	"github.com/pokrovsky-io/msg-store/pkg/server"
+	"github.com/pokrovsky-io/msg-store/pkg/httpserver"
+	"github.com/pokrovsky-io/msg-store/pkg/postgres"
 	"log"
 	"sync"
 )
 
 func Run(cfg *config.Config) {
+
 	// Repository
-	ch := cache.New()
-	pg := psql.New()
+	pg, err := postgres.New(cfg.DB.GetURL())
+	if err != nil {
+		// TODO: Обработать ошибку
+		log.Fatal(err)
+	}
+	defer pg.Close()
+
+	r := repo.New(pg)
 
 	// Use case
-	uc := usecase.New(ch, pg)
+	uc := usecase.New(r)
 
 	// STAN
 	sc, err := stan.Connect(cfg.NATS.ClusterID, cfg.NATS.ClientID)
@@ -30,15 +37,18 @@ func Run(cfg *config.Config) {
 		log.Fatal(err)
 	}
 	defer sc.Close()
+
 	stn := nats.New(sc, uc)
+
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
+
 	go stn.Subscribe(wg, cfg.NATS.Subject)
 
 	// HTTP Server
 	handler := gin.New()
 	rest.NewRouter(handler, uc)
-	httpServer := server.New(handler, server.Port(cfg.HTTP.Port))
+	httpServer := httpserver.New(handler, httpserver.Port(cfg.HTTP.Port))
 
 	// TODO: Обработать ошибку
 	httpServer.Run()

@@ -1,4 +1,4 @@
-package server
+package httpserver
 
 import (
 	"net/http"
@@ -50,7 +50,7 @@ func (s *Server) Run() error {
 //
 //func (s *Server) start() {
 //	go func() {
-//		s.notify <- s.server.ListenAndServe()
+//		s.notify <- s.httpserver.ListenAndServe()
 //		close(s.notify)
 //	}()
 //}
@@ -64,5 +64,5 @@ func (s *Server) Run() error {
 //	ctx, cancel := context.WithTimeout(context.Background(), s.shutdownTimeout)
 //	defer cancel()
 //
-//	return s.server.Shutdown(ctx)
+//	return s.httpserver.Shutdown(ctx)
 //}

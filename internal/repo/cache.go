@@ -1,7 +1,6 @@
 package repo
 
 import (
-	"fmt"
 	"github.com/pokrovsky-io/msg-store/internal/entity"
 )
 
@@ -10,10 +9,8 @@ type cache struct {
 }
 
 func (c *cache) check(ids []int) bool {
-	fmt.Println(len(ids))
-
 	for _, id := range ids {
-		if id >= len(c.data) {
+		if id <= 0 || id >= len(c.data) {
 			return false
 		}
 	}

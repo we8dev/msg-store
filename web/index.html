@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Message Store</title>
+    <link href="/static/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/highlight.min.css" rel="stylesheet">
+    <link href="/static/style.css" rel="stylesheet">
+</head>
+<body class="pt-5">
+<div class="container">
+    <form class="mb-4" action="/" method="GET">
+        <p class="h3">Введите id заказа:</p>
+        <div class="form-group">
+            <input type="text" class="form-control" name="order_id">
+            <small class="mt-1 form-text text-muted">Числа от 1 до n</small>
+        </div>
+        <button type="submit" class="mt-2 btn btn-primary">Найти</button>
+    </form>
+
+    <pre class="w-100"><code class="code-field language-json">{{ .data }}</code></pre>
+</div>
+</body>
+<script src="/static/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</html>

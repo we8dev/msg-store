@@ -1,7 +1,7 @@
 package rest
 
 import (
-	"fmt"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/pokrovsky-io/msg-store/internal/usecase"
 	"net/http"
@@ -16,15 +16,16 @@ func NewRouter(router *gin.Engine, uc usecase.Order) {
 	//handler.Use(gin.Logger())
 	//handler.Use(gin.Recovery())
 
-	// Routers
-	router.GET("/:id", func(c *gin.Context) {
-		id, _ := strconv.Atoi(c.Param("id"))
+	router.Static("/static", "./web/static")
+	router.LoadHTMLFiles("web/index.html")
+
+	router.GET("/", func(c *gin.Context) {
+		id, _ := strconv.Atoi(c.Query("order_id"))
 		order, _ := uc.Get(id)
-		fmt.Println("call")
+		jsonOrder, _ := json.MarshalIndent(order, "", "  ")
 
-		c.JSON(http.StatusOK, order)
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			"data": string(jsonOrder),
+		})
 	})
-
-	// TODO Вызвать метод Get у usecase и передать ему параметры
-
 }

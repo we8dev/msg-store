@@ -10,7 +10,7 @@ type cache struct {
 
 func (c *cache) check(ids []int) bool {
 	for _, id := range ids {
-		if id <= 0 || id >= len(c.data) {
+		if id >= len(c.data) {
 			return false
 		}
 	}

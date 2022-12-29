@@ -5,3 +5,9 @@ migrate_up:
 
 migrate_down:
 	migrate -path ./migrations -database $(db) down
+
+run:
+	go run ./cmd/app
+
+run_pub:
+	go run ./integration-test

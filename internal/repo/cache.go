@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"github.com/pokrovsky-io/msg-store/internal/entity"
+	"github.com/pokrovsky-io/msgstore/internal/entity"
 )
 
 type cache struct {

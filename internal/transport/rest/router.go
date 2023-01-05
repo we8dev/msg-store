@@ -3,7 +3,7 @@ package rest
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"github.com/pokrovsky-io/msg-store/internal/usecase"
+	"github.com/pokrovsky-io/msgstore/internal/usecase"
 	"net/http"
 	"strconv"
 )

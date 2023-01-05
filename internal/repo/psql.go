@@ -3,7 +3,7 @@ package repo
 import (
 	"encoding/json"
 	"github.com/jmoiron/sqlx"
-	"github.com/pokrovsky-io/msg-store/internal/entity"
+	"github.com/pokrovsky-io/msgstore/internal/entity"
 )
 
 type psql struct {

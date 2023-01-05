@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/pokrovsky-io/msg-store/config"
-	"github.com/pokrovsky-io/msg-store/internal/app"
+	"github.com/pokrovsky-io/msgstore/config"
+	"github.com/pokrovsky-io/msgstore/internal/app"
 )
 
 func main() {

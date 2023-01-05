@@ -1,0 +1,17 @@
+# TODO: Добавить конфигурирование через переменные среды
+
+nats:
+  cluster_id: 'test-cluster'
+  client_id: 'test-client-1'
+  subject: 'foo'
+
+http:
+  port: '8080'
+
+db:
+  host: "localhost"
+  port: "5432"
+  dbname: "orders_db"
+  user: "admin"
+  password: "admin"
+  sslmode: "disable"
